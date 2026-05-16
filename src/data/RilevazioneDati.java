@@ -1,17 +1,11 @@
-/*
- */
 package data;
 
 import data.storage.IDataStorage;
 import java.util.Random;
 
-/**
- *
- * @author GI.AIROLDI
- */
 public class RilevazioneDati implements Runnable{
 
-    private IDataStorage storage;
+    private final IDataStorage storage;
     
     public RilevazioneDati(IDataStorage storage) {
         this.storage = storage;
@@ -22,7 +16,6 @@ public class RilevazioneDati implements Runnable{
         Data data = getData();
 
         storage.add(data);
-      
     }
     
     private Data getData(){

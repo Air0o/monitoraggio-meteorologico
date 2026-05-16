@@ -1,20 +1,13 @@
-/*
- */
 package monitoraggiometeorologico;
 
 import data.Data;
 import data.storage.IDataStorage;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 import java.util.concurrent.*;
 
-/**
- *
- * @author GI.AIROLDI
- */
 public class CentroElaborazione {
-    private final ExecutorService executor = Executors.newFixedThreadPool(4);
-    private final List<StazioneMeteo> stazioni = new ArrayList();
+    private ExecutorService executor;
+    private final List<StazioneMeteo> stazioni = new ArrayList<>();
     private final IDataStorage dataStorage;
 
     public CentroElaborazione(IDataStorage dataStorage) {
@@ -24,8 +17,7 @@ public class CentroElaborazione {
             StazioneMeteo stazione = new StazioneMeteo(
                     Long.valueOf(i), 
                     "nome", 
-                    "posizione", 
-                    executor
+                    "posizione"
             );
             
             stazioni.add(stazione);
@@ -39,20 +31,31 @@ public class CentroElaborazione {
     
     public void StartDataCollection(int cycles) throws InterruptedException{
         for(int cycle = 0; cycle < cycles; cycle++){
-            System.out.println("Inizio ciclo " + cycle);
+            System.out.printf("Starting data collection cycle (%d)\n", cycle);
+            
+            executor = Executors.newFixedThreadPool(4); 
+            setStationsExecutorServiceInstances();
             dataStorage.purge();
             
             for(StazioneMeteo stazione : stazioni){
                 stazione.getDataAndAddToStorage(dataStorage);
             }
-            
-            executor.awaitTermination(100, TimeUnit.SECONDS);
+
+            System.out.println("Waiting for data collection to complete...");
+            executor.shutdown();
+            executor.awaitTermination(30, TimeUnit.SECONDS);
             
             System.out.println("Storage content: ");
             printStorageContent();
             
             //Data averageData = getAverageData();
             //System.out.println("Dati medi: " + averageData.toString());
+        }
+    }
+
+    private void setStationsExecutorServiceInstances(){
+        for(StazioneMeteo station : stazioni){
+            station.setExecutor(executor);
         }
     }
     

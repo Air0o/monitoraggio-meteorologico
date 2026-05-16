@@ -4,7 +4,7 @@ package monitoraggiometeorologico;
 
 import data.RilevazioneDati;
 import data.storage.IDataStorage;
-import java.util.concurrent.Executor;
+import java.util.concurrent.ExecutorService;
 
 /**
  *
@@ -14,18 +14,39 @@ public class StazioneMeteo {
     private final Long id;
     private final String name;
     private final String posizione;
-    private final Executor executor;
+    private ExecutorService executor;
 
-    public StazioneMeteo(Long id, String name, String posizione, Executor executor) {
+    public StazioneMeteo(Long id, String name, String posizione) {
         this.id = id;
         this.name = name;
         this.posizione = posizione;
-        this.executor = executor;
     }
     
-    public void getDataAndAddToStorage(IDataStorage storage){
+    public void getDataAndAddToStorage(IDataStorage storage) throws IllegalStateException{
+        if(executor == null){
+            throw new IllegalStateException("The ExecutorService is null!");
+        }
+        if(executor.isShutdown()){
+            throw new IllegalStateException("The ExecutorService has been shut down!");
+        }
         RilevazioneDati rilevazione = new RilevazioneDati(storage);
-        executor.execute(rilevazione);
+        executor.submit(rilevazione);
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getPosizione() {
+        return posizione;
+    }
+
+    public void setExecutor(ExecutorService executor) {
+        this.executor = executor;
     }
     
     

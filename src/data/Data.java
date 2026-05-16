@@ -1,11 +1,5 @@
-/*
- */
 package data;
 
-/**
- *
- * @author GI.AIROLDI
- */
 public class Data {
     private Integer temperature;
     private Integer humidity;
@@ -47,9 +41,9 @@ public class Data {
         
         sb.append("Temperature: ")
             .append(temperature)
-            .append(", humidity: ")
+            .append(", \thumidity: ")
             .append(humidity)
-            .append(", pressure: ")
+            .append(", \tpressure: ")
             .append(pressure);
         
         return sb.toString();
