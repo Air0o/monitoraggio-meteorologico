@@ -16,8 +16,8 @@ public class CentroElaborazione {
         for(int i = 0; i < 10; i++){
             WeatherStation stazione = new WeatherStation(
                     Long.valueOf(i), 
-                    "nome", 
-                    "posizione"
+                    "name", 
+                    "position"
             );
             
             stations.put(Long.valueOf(i), stazione);

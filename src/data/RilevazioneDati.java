@@ -23,7 +23,7 @@ public class RilevazioneDati implements Runnable{
     private Data getData(){
         Random rng = new Random();
         try {
-            Thread.sleep(rng.nextInt(1, 3));
+            Thread.sleep(rng.nextInt(1000, 3000));
         } catch (InterruptedException ex) {
             System.getLogger(RilevazioneDati.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
         }

@@ -1,7 +1,7 @@
 package data;
 
 public class Data {
-    private Long stationId;
+    private final Long stationId;
     private Integer temperature;
     private Integer humidity;
     private Integer pressure;
@@ -40,11 +40,13 @@ public class Data {
     @Override
     public String toString(){
         StringBuilder sb = new StringBuilder();
-        
-        sb.append("[id: ")
-            .append(stationId)
-            .append("] ")
-            .append("Temperature: ")
+        if(stationId != -1){
+            sb.append("[id: ")
+                .append(stationId)
+                .append("] ");
+
+        }
+        sb.append("Temperature: ")
             .append(temperature)
             .append(", \thumidity: ")
             .append(humidity)
