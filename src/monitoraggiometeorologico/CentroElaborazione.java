@@ -48,8 +48,8 @@ public class CentroElaborazione {
             System.out.println("Storage content: ");
             printStorageContent();
             
-            //Data averageData = getAverageData();
-            //System.out.println("Dati medi: " + averageData.toString());
+            Data averageData = getAverageData();
+            System.out.println("Mean values: " + averageData.toString());
         }
     }
 
@@ -68,7 +68,33 @@ public class CentroElaborazione {
     }
     
     private Data getAverageData(){
-        return null;
+        List<Data> data = dataStorage.listAll();
+
+        List<Integer> temperatures = new ArrayList<>();
+        List<Integer> humidities = new ArrayList<>();
+        List<Integer> pressures = new ArrayList<>();
+
+        for(Data d : data){
+            temperatures.add(d.getTemperature());
+            humidities.add(d.getHumidity());
+            pressures.add(d.getPressure());
+        }
+
+        Data average = new Data(
+            getListAverage(temperatures),
+            getListAverage(humidities),
+            getListAverage(pressures)
+        );
+
+        return average;
+    }
+
+    private Integer getListAverage(List<Integer> l){
+        Integer x = 0;
+        for(Integer i : l){
+            x += i;
+        }
+        return x / l.size();
     }
     
     private StazioneMeteo getStazioneWithHighTemp(){return null;}
