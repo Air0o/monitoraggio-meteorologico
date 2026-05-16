@@ -6,9 +6,11 @@ import java.util.Random;
 public class RilevazioneDati implements Runnable{
 
     private final IDataStorage storage;
-    
-    public RilevazioneDati(IDataStorage storage) {
+    private final Long stationId;
+
+    public RilevazioneDati(Long stationId, IDataStorage storage) {
         this.storage = storage;
+        this.stationId = stationId;
     }
 
     @Override
@@ -26,6 +28,7 @@ public class RilevazioneDati implements Runnable{
             System.getLogger(RilevazioneDati.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
         }
         return new Data(
+                stationId,
                 getTemp(),
                 getHum(),
                 getPres()

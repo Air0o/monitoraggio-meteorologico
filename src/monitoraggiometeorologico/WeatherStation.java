@@ -10,13 +10,13 @@ import java.util.concurrent.ExecutorService;
  *
  * @author GI.AIROLDI
  */
-public class StazioneMeteo {
+public class WeatherStation {
     private final Long id;
     private final String name;
     private final String posizione;
     private ExecutorService executor;
 
-    public StazioneMeteo(Long id, String name, String posizione) {
+    public WeatherStation(Long id, String name, String posizione) {
         this.id = id;
         this.name = name;
         this.posizione = posizione;
@@ -29,7 +29,7 @@ public class StazioneMeteo {
         if(executor.isShutdown()){
             throw new IllegalStateException("The ExecutorService has been shut down!");
         }
-        RilevazioneDati rilevazione = new RilevazioneDati(storage);
+        RilevazioneDati rilevazione = new RilevazioneDati(id, storage);
         executor.submit(rilevazione);
     }
 

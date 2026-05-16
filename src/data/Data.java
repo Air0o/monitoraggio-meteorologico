@@ -1,11 +1,13 @@
 package data;
 
 public class Data {
+    private Long stationId;
     private Integer temperature;
     private Integer humidity;
     private Integer pressure;
 
-    public Data(Integer temperature, Integer humidity, Integer pressure) {
+    public Data(Long stationId, Integer temperature, Integer humidity, Integer pressure) {
+        this.stationId = stationId;
         this.temperature = temperature;
         this.humidity = humidity;
         this.pressure = pressure;
@@ -39,7 +41,10 @@ public class Data {
     public String toString(){
         StringBuilder sb = new StringBuilder();
         
-        sb.append("Temperature: ")
+        sb.append("[id: ")
+            .append(stationId)
+            .append("] ")
+            .append("Temperature: ")
             .append(temperature)
             .append(", \thumidity: ")
             .append(humidity)
@@ -47,5 +52,9 @@ public class Data {
             .append(pressure);
         
         return sb.toString();
+    }
+
+    public Long getStationId() {
+        return stationId;
     }
 }

@@ -7,20 +7,20 @@ import java.util.concurrent.*;
 
 public class CentroElaborazione {
     private ExecutorService executor;
-    private final List<StazioneMeteo> stazioni = new ArrayList<>();
+    private final Map<Long, WeatherStation> stations = new HashMap<>();
     private final IDataStorage dataStorage;
 
     public CentroElaborazione(IDataStorage dataStorage) {
         this.dataStorage = dataStorage;
         
         for(int i = 0; i < 10; i++){
-            StazioneMeteo stazione = new StazioneMeteo(
+            WeatherStation stazione = new WeatherStation(
                     Long.valueOf(i), 
                     "nome", 
                     "posizione"
             );
             
-            stazioni.add(stazione);
+            stations.put(Long.valueOf(i), stazione);
         }
     }
     
@@ -37,7 +37,7 @@ public class CentroElaborazione {
             setStationsExecutorServiceInstances();
             dataStorage.purge();
             
-            for(StazioneMeteo stazione : stazioni){
+            for(WeatherStation stazione : stations.values()){
                 stazione.getDataAndAddToStorage(dataStorage);
             }
 
@@ -50,11 +50,25 @@ public class CentroElaborazione {
             
             Data averageData = getAverageData();
             System.out.println("Mean values: " + averageData.toString());
+
+            WeatherStation recordStation = getStationWithHighTemp();
+            System.out.println("Station that measured the highest temperature: " + recordStation.getId());
+            
+            recordStation = getStationWithLowTemp();
+            System.out.println("Station that measured the lowest temperature: " + recordStation.getId());
+            recordStation = getStationWithHighHum();
+            System.out.println("Station that measured the highest humidity: " + recordStation.getId());
+            recordStation = getStationWithLowHum();
+            System.out.println("Station that measured the lowest humidity: " + recordStation.getId());
+            recordStation = getStationWithHighPres();
+            System.out.println("Station that measured the highest pressure: " + recordStation.getId());
+            recordStation = getStationWithLowPres();
+            System.out.println("Station that measured the lowest pressure: " + recordStation.getId());
         }
     }
 
     private void setStationsExecutorServiceInstances(){
-        for(StazioneMeteo station : stazioni){
+        for(WeatherStation station : stations.values()){
             station.setExecutor(executor);
         }
     }
@@ -81,6 +95,7 @@ public class CentroElaborazione {
         }
 
         Data average = new Data(
+            -1l,
             getListAverage(temperatures),
             getListAverage(humidities),
             getListAverage(pressures)
@@ -97,11 +112,59 @@ public class CentroElaborazione {
         return x / l.size();
     }
     
-    private StazioneMeteo getStazioneWithHighTemp(){return null;}
-    private StazioneMeteo getStazioneWithHighHum(){return null;}
-    private StazioneMeteo getStazioneWithHighPres(){return null;}
+    private WeatherStation getStationWithHighTemp(){
+        List<Data> data = dataStorage.listAll();
+        data.sort((a, b) -> {
+            return b.getTemperature().compareTo(a.getTemperature());
+        });
+        
+        Long stationId = data.get(0).getStationId();
+        return stations.get(stationId);
+    }
+    private WeatherStation getStationWithHighHum(){
+        List<Data> data = dataStorage.listAll();
+        data.sort((a, b) -> {
+            return b.getHumidity().compareTo(a.getHumidity());
+        });
+        
+        Long stationId = data.get(0).getStationId();
+        return stations.get(stationId);
+    }
+    private WeatherStation getStationWithHighPres(){
+        List<Data> data = dataStorage.listAll();
+        data.sort((a, b) -> {
+            return b.getPressure().compareTo(a.getPressure());
+        });
+        
+        Long stationId = data.get(0).getStationId();
+        return stations.get(stationId);
+    }
     
-    private StazioneMeteo getStazioneWithLowTemp(){return null;}
-    private StazioneMeteo getStazioneWithLowHum(){return null;}
-    private StazioneMeteo getStazioneWithLowPres(){return null;}
+    private WeatherStation getStationWithLowTemp(){
+        List<Data> data = dataStorage.listAll();
+        data.sort((a, b) -> {
+            return a.getTemperature().compareTo(b.getTemperature());
+        });
+        
+        Long stationId = data.get(0).getStationId();
+        return stations.get(stationId);
+    }
+    private WeatherStation getStationWithLowHum(){
+        List<Data> data = dataStorage.listAll();
+        data.sort((a, b) -> {
+            return a.getHumidity().compareTo(b.getHumidity());
+        });
+        
+        Long stationId = data.get(0).getStationId();
+        return stations.get(stationId);
+    }
+    private WeatherStation getStationWithLowPres(){
+        List<Data> data = dataStorage.listAll();
+        data.sort((a, b) -> {
+            return a.getPressure().compareTo(b.getPressure());
+        });
+        
+        Long stationId = data.get(0).getStationId();
+        return stations.get(stationId);
+    }
 }
