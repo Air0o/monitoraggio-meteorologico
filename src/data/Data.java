@@ -41,9 +41,9 @@ public class Data {
     public String toString(){
         StringBuilder sb = new StringBuilder();
         if(stationId != -1){
-            sb.append("[id: ")
+            sb.append("id: ")
                 .append(stationId)
-                .append("] ");
+                .append(", ");
 
         }
         sb.append("Temperature: ")
