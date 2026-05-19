@@ -29,6 +29,7 @@ public class WeatherStation {
         if(executor.isShutdown()){
             throw new IllegalStateException("The ExecutorService has been shut down!");
         }
+        
         RilevazioneDati rilevazione = new RilevazioneDati(id, storage);
         executor.submit(rilevazione);
     }
