@@ -1,6 +1,8 @@
 package data;
 
-public class Data {
+import java.io.Serializable;
+
+public class Data implements Serializable{
     private final Long stationId;
     private Integer temperature;
     private Integer humidity;

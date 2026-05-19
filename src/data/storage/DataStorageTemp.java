@@ -4,7 +4,7 @@ import data.Data;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DataStorage implements IDataStorage{
+public class DataStorageTemp implements IDataStorage{
 
     private List<Data> data = new ArrayList<>();
     
@@ -21,6 +21,11 @@ public class DataStorage implements IDataStorage{
     @Override
     public synchronized void purge() {
         data = new ArrayList<>();
+    }
+
+    @Override
+    public void add(List<Data> d) {
+        data.addAll(d);
     }
     
 }

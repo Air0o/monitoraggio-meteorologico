@@ -80,7 +80,7 @@ public class CentroElaborazione {
     private void printStorageContent(){
         List<Data> content = dataStorage.listAll();
         
-        view.printData(content);
+        view.showData(content);
     }
     
     private Data getAverageData(){

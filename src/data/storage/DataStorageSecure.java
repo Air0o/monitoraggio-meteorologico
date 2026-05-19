@@ -10,7 +10,7 @@ import view.MessageType;
 
 public class DataStorageSecure implements IDataStorage{
 
-    private final DataStorage dataStorage = new DataStorage();
+    private final DataStorageTemp dataStorage = new DataStorageTemp();
     private final ISecurityService securityService;
     private final IDataView view;
 
@@ -42,6 +42,11 @@ public class DataStorageSecure implements IDataStorage{
     @Override
     public void purge() {
         dataStorage.purge();
+    }
+
+    @Override
+    public void add(List<Data> d) {
+        dataStorage.add(d);
     }
     
 }

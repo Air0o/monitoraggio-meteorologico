@@ -30,14 +30,14 @@ public class DataViewCLI implements IDataView{
     }
 
     @Override
-    public void printData(Data d) {
+    public void showData(Data d) {
         System.out.println(d);
     }
 
     @Override
-    public void printData(List<Data> data) {
+    public void showData(List<Data> data) {
         for(Data d : data){
-            printData(d);
+            showData(d);
         }
     }
 
