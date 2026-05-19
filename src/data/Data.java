@@ -46,7 +46,7 @@ public class Data {
                 .append(", ");
 
         }
-        sb.append("Temperature: ")
+        sb.append("Temp: ")
             .append(temperature)
             .append(", \thumidity: ")
             .append(humidity)

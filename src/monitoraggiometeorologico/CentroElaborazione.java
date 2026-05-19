@@ -4,14 +4,18 @@ import data.Data;
 import data.storage.IDataStorage;
 import java.util.*;
 import java.util.concurrent.*;
+import view.IDataView;
 
 public class CentroElaborazione {
     private ExecutorService executor;
     private final Map<Long, WeatherStation> stations = new HashMap<>();
     private final IDataStorage dataStorage;
 
-    public CentroElaborazione(IDataStorage dataStorage) {
+    private final IDataView view;
+
+    public CentroElaborazione(IDataStorage dataStorage, IDataView view) {
         this.dataStorage = dataStorage;
+        this.view = view;
         
         for(int i = 0; i < 10; i++){
             WeatherStation stazione = new WeatherStation(
@@ -31,7 +35,7 @@ public class CentroElaborazione {
     
     public void StartDataCollection(int cycles) throws InterruptedException{
         for(int cycle = 0; cycle < cycles; cycle++){
-            System.out.printf("Starting data collection cycle (%d)\n", cycle);
+            view.showMessage("Starting data collection cycle (" + cycle + ")");
             
             executor = Executors.newFixedThreadPool(4); 
             setStationsExecutorServiceInstances();
@@ -41,29 +45,29 @@ public class CentroElaborazione {
                 stazione.getDataAndAddToStorage(dataStorage);
             }
 
-            System.out.println("Waiting for data collection to complete...");
+            view.showMessage("Waiting for data collection to complete...");
             executor.shutdown();
             executor.awaitTermination(30, TimeUnit.SECONDS);
             
-            System.out.println("Storage content: ");
+            view.showMessage("Storage content: ");
             printStorageContent();
             
             Data averageData = getAverageData();
-            System.out.println("Mean values: " + averageData.toString());
+            view.showMessage("Mean values: " + averageData.toString());
 
             WeatherStation recordStation = getStationWithHighTemp();
-            System.out.println("Station that measured the highest temperature: " + recordStation.getId());
+            view.showMessage("Station that measured the highest temperature: " + recordStation.getId());
             
             recordStation = getStationWithLowTemp();
-            System.out.println("Station that measured the lowest temperature: " + recordStation.getId());
+            view.showMessage("Station that measured the lowest temperature: " + recordStation.getId());
             recordStation = getStationWithHighHum();
-            System.out.println("Station that measured the highest humidity: " + recordStation.getId());
+            view.showMessage("Station that measured the highest humidity: " + recordStation.getId());
             recordStation = getStationWithLowHum();
-            System.out.println("Station that measured the lowest humidity: " + recordStation.getId());
+            view.showMessage("Station that measured the lowest humidity: " + recordStation.getId());
             recordStation = getStationWithHighPres();
-            System.out.println("Station that measured the highest pressure: " + recordStation.getId());
+            view.showMessage("Station that measured the highest pressure: " + recordStation.getId());
             recordStation = getStationWithLowPres();
-            System.out.println("Station that measured the lowest pressure: " + recordStation.getId());
+            view.showMessage("Station that measured the lowest pressure: " + recordStation.getId());
         }
     }
 
@@ -76,9 +80,7 @@ public class CentroElaborazione {
     private void printStorageContent(){
         List<Data> content = dataStorage.listAll();
         
-        for(Data data : content){
-            System.out.println(data.toString());
-        }
+        view.printData(content);
     }
     
     private Data getAverageData(){

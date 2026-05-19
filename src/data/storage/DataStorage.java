@@ -10,7 +10,6 @@ public class DataStorage implements IDataStorage{
     
     @Override
     public synchronized void add(Data d) {
-        System.out.printf("Storage add {%s}\n", d.toString());
         data.add(d);
     }
 
@@ -21,7 +20,6 @@ public class DataStorage implements IDataStorage{
 
     @Override
     public synchronized void purge() {
-        System.out.println("Storage purge");
         data = new ArrayList<>();
     }
     

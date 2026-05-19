@@ -5,14 +5,18 @@ import java.util.List;
 import security.CriticalDataException;
 import security.ISecurityService;
 import security.InvalidDataException;
+import view.IDataView;
+import view.MessageType;
 
 public class DataStorageSecure implements IDataStorage{
 
-    DataStorage dataStorage = new DataStorage();
-    ISecurityService securityService;
+    private final DataStorage dataStorage = new DataStorage();
+    private final ISecurityService securityService;
+    private final IDataView view;
 
-    public DataStorageSecure(ISecurityService securityService) {
+    public DataStorageSecure(ISecurityService securityService, IDataView view) {
         this.securityService = securityService;
+        this.view = view;
     }
 
     @Override
@@ -20,8 +24,10 @@ public class DataStorageSecure implements IDataStorage{
         try {
             securityService.checkData(d);
         } catch (InvalidDataException | CriticalDataException e) {
-            System.err.println(e.getMessage());
-            if(e instanceof InvalidDataException){
+            if(e instanceof CriticalDataException){
+                view.showMessage(e.getMessage(), MessageType.WARNING);
+            } else if(e instanceof InvalidDataException){
+                view.showMessage(e.getMessage(), MessageType.ERROR);
                 return;
             }
         }

@@ -19,7 +19,7 @@ public class Alarm implements ISecurityService{
             throw new InvalidDataException("Pressure is null");
         }
         if(data.getTemperature() < -2 || data.getTemperature() > 30){
-            throw new CriticalDataException("Temperature is out of range (-2°, 30°)");
+            throw new CriticalDataException("Temperature out of range (-2°, 30°)");
         }
     }
     
